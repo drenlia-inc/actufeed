@@ -2,7 +2,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { dirname, join, sep } from 'path';
 import { createServer } from 'http';
 import { setDefaultResultOrder } from 'node:dns';
 import dns from 'node:dns/promises';
@@ -2576,19 +2576,28 @@ app.get('/api/health', (req, res) => {
 // Serve static files from Vite build (in production only)
 // In development, Vite dev server handles static files
 if (process.env.NODE_ENV === 'production') {
-  // Disable caching for index.html to ensure fresh JavaScript bundles
+  // index.html is the offline app shell, so it must be stored. Three days is
+  // long enough to reopen without a network, and short enough that an online
+  // visit picks up a new build afterward. stale-if-error keeps that stored
+  // copy usable when the origin cannot be reached after it goes stale.
+  // Hashed JS/CSS stay cached for a year. maxAge is omitted: send applies it
+  // after setHeaders and would overwrite the HTML policy.
+  const indexHtmlCacheControl = 'public, max-age=259200, stale-if-error=604800'
   app.use(express.static(join(__dirname, 'dist'), {
-    maxAge: '1y', // Cache static assets for 1 year
     etag: true,
-    lastModified: true
+    lastModified: true,
+    setHeaders(res, filePath) {
+      if (filePath.endsWith(`${sep}index.html`) || filePath.endsWith('/index.html')) {
+        res.setHeader('Cache-Control', indexHtmlCacheControl)
+        return
+      }
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+    },
   }));
-  
-  // Fallback to index.html for SPA routing (no cache for HTML)
+
+  // Client-side routes serve the same shell and must follow the same policy.
   app.get('*', (req, res) => {
-    // Don't cache index.html to ensure users get the latest version
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
+    res.setHeader('Cache-Control', indexHtmlCacheControl);
     res.sendFile(join(__dirname, 'dist', 'index.html'));
   });
 }
