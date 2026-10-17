@@ -22,3 +22,12 @@ export function isAndroidMobileBrowser() {
   /* In-app browsers / WebViews on phones */
   return /; wv\)/i.test(ua)
 }
+
+/**
+ * True on Android phones and tablets. Desktop browsers do not match.
+ * Tablets are included; they often omit "Mobile", which {@link isAndroidMobileBrowser} requires.
+ */
+export function isAndroidPhoneOrTabletBrowser() {
+  if (typeof navigator === 'undefined') return false
+  return /Android/i.test(navigator.userAgent || '')
+}

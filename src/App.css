@@ -776,16 +776,21 @@
 }
 
 .help-modal__start-tour {
-  margin-right: 6px;
-  padding: 8px 12px;
+  margin: 0;
+  padding: 6px 8px;
+  min-height: 36px;
+  flex: 0 1 auto;
+  min-width: 4.25rem;
   border-radius: 10px;
   border: 1px solid color-mix(in srgb, var(--af-accent) 35%, transparent);
   background: color-mix(in srgb, var(--af-accent) 10%, transparent);
   color: var(--af-accent);
-  font-size: 0.82rem;
+  font-size: 0.75rem;
   font-weight: 600;
+  line-height: 1.15;
+  text-align: center;
+  white-space: normal;
   cursor: pointer;
-  white-space: nowrap;
 }
 
 .help-modal__start-tour:hover {
@@ -1211,9 +1216,9 @@
 
 .help-modal__top {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
   padding: 16px 18px 0;
   flex-shrink: 0;
 }
@@ -1222,31 +1227,36 @@
   margin: 0;
   font-size: 1.15rem;
   font-weight: 800;
+  line-height: 1.2;
   color: var(--af-text);
-  min-width: 0;
-  flex: 1;
 }
 
 .help-modal__top-actions {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 8px 10px;
-  flex-shrink: 0;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  gap: 6px;
+  min-width: 0;
+  width: 100%;
 }
 
 .help-modal__about-jump {
   margin: 0;
-  padding: 8px 12px;
-  min-height: 40px;
+  padding: 6px 8px;
+  min-height: 36px;
+  flex: 0 1 auto;
+  min-width: 3.25rem;
   border: 1.5px solid color-mix(in srgb, var(--af-accent) 35%, var(--af-border));
   border-radius: 10px;
   background: color-mix(in srgb, var(--af-accent) 8%, transparent);
   color: var(--af-accent);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+  text-align: center;
+  white-space: normal;
   cursor: pointer;
   transition:
     background 0.15s ease,
@@ -1433,6 +1443,7 @@
 
 .help-modal__lang {
   display: inline-flex;
+  flex: 0 0 auto;
   border-radius: 10px;
   overflow: hidden;
   border: 1.5px solid var(--af-border);
@@ -1442,9 +1453,9 @@
 
 .help-modal__lang-btn {
   margin: 0;
-  padding: 8px 14px;
-  min-height: 40px;
-  min-width: 44px;
+  padding: 6px 10px;
+  min-height: 36px;
+  min-width: 36px;
   border: none;
   background: transparent;
   color: var(--af-text-secondary);
@@ -1481,9 +1492,10 @@
 }
 
 .help-modal__close {
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  flex: 0 0 auto;
+  margin-left: auto;
+  width: 36px;
+  height: 36px;
   border: none;
   border-radius: 10px;
   background: var(--af-surface-muted);
@@ -1505,6 +1517,39 @@
   margin: 6px 18px 0;
   font-size: 0.78rem;
   color: var(--af-text-secondary);
+}
+
+.help-modal__store {
+  display: flex;
+  flex-shrink: 0;
+  padding: 12px 18px 0;
+}
+
+.help-modal__store-link {
+  display: inline-flex;
+  line-height: 0;
+  border-radius: 8px;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.help-modal__store-link:hover {
+  opacity: 0.92;
+}
+
+.help-modal__store-link:active {
+  transform: scale(0.98);
+}
+
+.help-modal__store-link:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--af-accent) 35%, transparent);
+}
+
+.help-modal__store-badge {
+  display: block;
+  height: 40px;
+  width: auto;
+  max-width: 100%;
 }
 
 .help-modal__search-wrap {

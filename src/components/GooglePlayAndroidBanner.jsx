@@ -1,4 +1,8 @@
-import { GOOGLE_PLAY_STORE_URL, googlePlayBadgePathForLanguage } from '../constants/appStore'
+import {
+  GOOGLE_PLAY_ANDROID_BANNER_DISMISSED_KEY,
+  GOOGLE_PLAY_STORE_URL,
+  googlePlayBadgePathForLanguage,
+} from '../constants/appStore'
 import { translations } from '../constants/translations'
 
 export function GooglePlayAndroidBanner({ uiLanguage, visible, onDismiss }) {

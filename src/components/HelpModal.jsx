@@ -1,6 +1,14 @@
 import { Fragment, useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react'
 import { Link } from 'react-router-dom'
+import {
+  APP_STORE_URL,
+  GOOGLE_PLAY_STORE_URL,
+  appStoreBadgePathForLanguage,
+  googlePlayBadgePathForLanguage,
+} from '../constants/appStore'
 import { translations } from '../constants/translations'
+import { useAndroidPhoneOrTabletWeb } from '../hooks/useAndroidMobileWeb'
+import { useAppleMobileWeb } from '../hooks/useAppleMobileWeb'
 import { HELP_SHORTCUTS_DROPDOWN_MEDIA, useMatchMedia } from '../hooks/useMatchMedia'
 
 function escapeRegExp(s) {
@@ -143,6 +151,9 @@ export const HelpModal = ({
   const [helpDisplayLang, setHelpDisplayLang] = useState(uiLanguage)
   const t = translations[helpDisplayLang]
   const showKeyboardShortcutHints = useMatchMedia(HELP_SHORTCUTS_DROPDOWN_MEDIA)
+  const isAppleMobileWeb = useAppleMobileWeb()
+  const isAndroidPhoneOrTabletWeb = useAndroidPhoneOrTabletWeb()
+  const mobileStore = isAppleMobileWeb ? 'appstore' : isAndroidPhoneOrTabletWeb ? 'googleplay' : null
   const [searchQuery, setSearchQuery] = useState('')
   const bodyRef = useRef(null)
   const closeBtnRef = useRef(null)
@@ -336,9 +347,38 @@ export const HelpModal = ({
             </button>
           </div>
         </div>
-        <p className="help-modal__hint">
-          {showKeyboardShortcutHints ? t.helpModalHint : t.helpModalHintTouch}
-        </p>
+        {showKeyboardShortcutHints ? (
+          <p className="help-modal__hint">{t.helpModalHint}</p>
+        ) : null}
+        {mobileStore ? (
+          <div className="help-modal__store">
+            <a
+              className="help-modal__store-link"
+              href={mobileStore === 'appstore' ? APP_STORE_URL : GOOGLE_PLAY_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={mobileStore === 'appstore' ? t.appStoreDesktopBtnTitle : t.googlePlayDesktopBtnTitle}
+            >
+              <img
+                className="help-modal__store-badge"
+                src={
+                  mobileStore === 'appstore'
+                    ? appStoreBadgePathForLanguage(helpDisplayLang)
+                    : googlePlayBadgePathForLanguage(helpDisplayLang)
+                }
+                alt={
+                  mobileStore === 'appstore'
+                    ? t.appStoreIosBannerBadgeAlt
+                    : t.googlePlayAndroidBannerBadgeAlt
+                }
+                width={mobileStore === 'appstore' ? 320 : 564}
+                height={mobileStore === 'appstore' ? 108 : 168}
+                decoding="async"
+                draggable={false}
+              />
+            </a>
+          </div>
+        ) : null}
         <div className="help-modal__search-wrap">
           <input
             type="search"
